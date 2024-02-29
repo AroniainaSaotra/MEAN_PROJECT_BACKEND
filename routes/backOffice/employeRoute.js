@@ -111,7 +111,7 @@ router.get('/rendezVousEmployeEncours/:idEmploye',async(request,response)=>{
     try{
       const idEmploye = request.params.idEmploye ;
       const rdvByEmploye = await RendezVous.find({"id_employe":new ObjectId(idEmploye),"statut": "En cours"}).populate('id_employe')  // Populate pour les détails de l'employé
-      .populate('id_utilisateur').populate('id_detail').maxTimeMS(20000);; 
+      .populate('id_utilisateur').populate('id_detail').maxTimeMS(20000);
       if(rdvByEmploye){
         const reponse = {
           message: 'Liste rendez-vous des employes',
@@ -142,7 +142,7 @@ router.get('/rendezVousEmployeTermine/:idEmploye',async(request,response)=>{
   try{
     const idEmploye = request.params.idEmploye ;
     const rdvByEmploye = await RendezVous.find({"id_employe":new ObjectId(idEmploye),"statut": "Termine"}).populate('id_employe')  // Populate pour les détails de l'employé
-    .populate('id_utilisateur').populate('id_detail').maxTimeMS(20000);; 
+    .populate('id_utilisateur').populate('id_detail').maxTimeMS(20000); 
     if(rdvByEmploye){
       const reponse = {
         message: 'Liste rendez-vous des employes',
