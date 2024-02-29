@@ -106,7 +106,67 @@ router.get('/listeemploye', async (request, response) => {
   });
   
 
+// route pour recuperer les rendez-vous par employe en cours
+router.get('/rendezVousEmployeEncours/:idEmploye',async(request,response)=>{
+    try{
+      const idEmploye = request.params.idEmploye ;
+      const rdvByEmploye = await RendezVous.find({"id_employe":new ObjectId(idEmploye),"statut": "En cours"}).populate('id_employe')  // Populate pour les détails de l'employé
+      .populate('id_utilisateur').populate('id_detail').maxTimeMS(20000);
+      if(rdvByEmploye){
+        const reponse = {
+          message: 'Liste rendez-vous des employes',
+          value: rdvByEmploye,
+          code: 200,
+        };
+        response.json(reponse);
+      }else{
+        const rep = {
+          message: 'Aucun rendez-vous pour cette employe',
+          code: 404,
+          value: null
+        };
+        response.status(404).json(rep);
+      }
+    }catch (err){
+      const rep = {
+        message: 'Erreur serveur',
+        code: 500,
+        value: err.message
+      };
+      response.status(500).json(rep);
+    }
+});
 
+// route pour recuperer les rendez-vous par employe termine
+router.get('/rendezVousEmployeTermine/:idEmploye',async(request,response)=>{
+  try{
+    const idEmploye = request.params.idEmploye ;
+    const rdvByEmploye = await RendezVous.find({"id_employe":new ObjectId(idEmploye),"statut": "Termine"}).populate('id_employe')  // Populate pour les détails de l'employé
+    .populate('id_utilisateur').populate('id_detail').maxTimeMS(20000); 
+    if(rdvByEmploye){
+      const reponse = {
+        message: 'Liste rendez-vous des employes',
+        value: rdvByEmploye,
+        code: 200,
+      };
+      response.json(reponse);
+    }else{
+      const rep = {
+        message: 'Aucun rendez-vous pour cette employe',
+        code: 404,
+        value: null
+      };
+      response.status(404).json(rep);
+    }
+  }catch (err){
+    const rep = {
+      message: 'Erreur serveur',
+      code: 500,
+      value: err.message
+    };
+    response.status(500).json(rep);
+  }
+});
 
 //route pour rechercher les rendez-vous par date et idEmploye(session)
 router.get('/rendezVousParDate/:idEmploye/:dateRecherche',async(request,response)=>{
